@@ -43,7 +43,7 @@ std::vector<std::string> ParseLine(const std::string& line,
 }
 
 std::vector<Parsed_line> ParseFileIntoVector(const std::string& file_path,
-                         const std::string& separator) {
+                                             const std::string& separator) {
   std::ifstream file;
   std::string line;
   std::vector<Parsed_line> vector_of_lines;
@@ -61,17 +61,31 @@ std::vector<Parsed_line> ParseFileIntoVector(const std::string& file_path,
   return vector_of_lines;
 }
 
-// void WriteElementsIntoVector(const std::string& file_path,
-//                              const std::vector<Parsed_string>& elements) {}
+void WriteElementsIntoVector(
+    const std::string& file_path,
+    const std::vector<Parsed_line>& vector_of_parsed_lines) {
+  std::ofstream file;
+
+  file.open(file_path);
+
+  if (file.is_open()) {
+    for (const Parsed_line& element : vector_of_parsed_lines) {
+      file << element.surname << std::endl;
+    }
+  } else {
+    std::cout << "Couldn't open the file" << std::endl;
+  }
+
+  file.close();
+}
 
 // Функции--
 
 int main() {
+  std::string file_read_path = R"(C:\Projects\WorkWithFiles\FileRead.txt)";
+  std::string file_write_path = R"(C:\Projects\WorkWithFiles\FileWrite.txt)";
   std::vector<Parsed_line> vector_of_lines =
-      ParseFileIntoVector("C:\\Projects\\WorkWithFiles\\FileRead.txt", "|");
+      ParseFileIntoVector(file_read_path, "|");
 
-  for (const auto& element : vector_of_lines) {
-    std::cout << "Name: " << element.name << std::endl;
-    std::cout << "Surname: " << element.surname << std::endl;
-  }
+  WriteElementsIntoVector(file_write_path, vector_of_lines);
 }
